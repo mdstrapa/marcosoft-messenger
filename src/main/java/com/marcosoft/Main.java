@@ -5,22 +5,22 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static volatile boolean isListnerActive = true;
+    //private static volatile boolean isListenerActive = true;
 
     public static void main(String[] args) {
-        System.out.println("Marcosoft Messenger");
+        System.out.println("Marcosoft Messenger =================================");
         System.out.println();
 
-        // starting the listner
-        Runnable listnerTask = () -> {
-            while(isListnerActive){
+        // starting the listener
+        Runnable listenerTask = () -> {
+            //while(isListenerActive){
                 MessageListener messageListener = new MessageListener(9999);
                 messageListener.listen();
-            }
+            //}
         };
 
-        Thread listnerThread = new Thread(listnerTask);
-        listnerThread.start();
+        Thread listenerThread = new Thread(listenerTask);
+        listenerThread.start();
 
         // configuring the sender parameters
         String ipDestination;
@@ -37,7 +37,7 @@ public class Main {
 
         String userMessage;
 
-        System.out.println("Dialog:");
+        System.out.println("Dialog: (type 'QUIT' to leave the conversation)");
         userMessage = scanner.nextLine();
         while (!userMessage.equals("QUIT")) {
 
@@ -45,17 +45,13 @@ public class Main {
             messageSender.sendMessage(userName + ": " + userMessage);
             messageSender.closeConnection();
 
-            //System.out.print("Next message or QUIT to exit: ");
             userMessage = scanner.nextLine();
         }
 
-        isListnerActive = false;
-        try {
-            listnerThread.join();
-            listnerThread.interrupt();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //isListenerActive = false;
+
+        listenerThread.interrupt();
+
         scanner.close();
 
     }

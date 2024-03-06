@@ -28,10 +28,21 @@ public class MessageListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
     private void handleIncomingMessage(String message) {
         System.out.println(message);
+    }
+
+    public void stop() {
+        if(serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
