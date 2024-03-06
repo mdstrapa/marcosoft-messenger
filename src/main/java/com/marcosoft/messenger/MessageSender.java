@@ -1,4 +1,4 @@
-package com.marcosoft;
+package com.marcosoft.messenger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
