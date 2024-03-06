@@ -37,7 +37,7 @@ public class Main {
 
         String userMessage;
 
-        System.out.print("Type a message or QUIT to exit: ");
+        System.out.println("Dialog:");
         userMessage = scanner.nextLine();
         while (!userMessage.equals("QUIT")) {
 
@@ -45,17 +45,17 @@ public class Main {
             messageSender.sendMessage(userName + ": " + userMessage);
             messageSender.closeConnection();
 
-            System.out.print("Next message or QUIT to exit: ");
+            //System.out.print("Next message or QUIT to exit: ");
             userMessage = scanner.nextLine();
         }
 
         isListnerActive = false;
         try {
             listnerThread.join();
+            listnerThread.interrupt();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //listnerThread.interrupt();
         scanner.close();
 
     }

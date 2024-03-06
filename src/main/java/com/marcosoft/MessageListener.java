@@ -32,6 +32,6 @@ public class MessageListener {
     }
 
     private void handleIncomingMessage(String message) {
-        System.out.println("Received message: " + message);
+        System.out.println(message);
     }
 }
