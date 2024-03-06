@@ -4,24 +4,59 @@ package com.marcosoft;
 import java.util.Scanner;
 
 public class Main {
+
+    private static volatile boolean isListnerActive = true;
+
     public static void main(String[] args) {
-        System.out.println("Marcosoft Messager");
+        System.out.println("Marcosoft Messenger");
         System.out.println();
 
+        // starting the listner
+        Runnable listnerTask = () -> {
+            while(isListnerActive){
+                MessageListener messageListener = new MessageListener(9999);
+                messageListener.listen();
+            }
+        };
+
+        Thread listnerThread = new Thread(listnerTask);
+        listnerThread.start();
+
+        // configuring the sender parameters
+        String ipDestination;
+        String userName;
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Please type 1 to send or 2 to listen: ");
-        String userInput = scanner.nextLine();
+        System.out.print("Type your name: " );
+        userName = scanner.nextLine();
+        System.out.print("Type the IP of the destination machine: " );
+        ipDestination = scanner.nextLine();
 
-        if(userInput.equals("1")){
-            MessageSender messageSender = new MessageSender("localhost", 9999);
-            messageSender.sendMessage("Hello, network application!");
+        System.out.println();
+
+        String userMessage;
+
+        System.out.print("Type a message or QUIT to exit: ");
+        userMessage = scanner.nextLine();
+        while (!userMessage.equals("QUIT")) {
+
+            MessageSender messageSender = new MessageSender(ipDestination, 9999);
+            messageSender.sendMessage(userName + ": " + userMessage);
             messageSender.closeConnection();
-        }else if(userInput.equals("2")){
-            MessageListener messageListener = new MessageListener(9999);
-            messageListener.listen();
+
+            System.out.print("Next message or QUIT to exit: ");
+            userMessage = scanner.nextLine();
         }
+
+        isListnerActive = false;
+        try {
+            listnerThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //listnerThread.interrupt();
+        scanner.close();
 
     }
 }
